@@ -1,0 +1,209 @@
+{
+  "entities": {
+    "UserAccount": {
+      "title": "User Account",
+      "description": "User profile for kids, parents, and admins",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "avatar": { "type": "string" },
+        "stars": { "type": "number" },
+        "level": { "type": "number" },
+        "streakDays": { "type": "number" },
+        "completedLessons": { "type": "number" },
+        "isVip": { "type": "boolean" },
+        "vipExpiryDate": { "type": "string" },
+        "trialTimeSeconds": { "type": "number" },
+        "allowedGrades": { "type": "array" }
+      },
+      "required": ["id", "name", "role"]
+    },
+    "DailyTask": {
+      "title": "Daily Task",
+      "description": "Task assigned to kids",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "rewardStars": { "type": "number" },
+        "completed": { "type": "boolean" }
+      },
+      "required": ["id", "title"]
+    },
+    "RewardItem": {
+      "title": "Reward Item",
+      "description": "Reward redeemable with stars",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "starCost": { "type": "number" }
+      },
+      "required": ["id", "title"]
+    },
+    "ParentNote": {
+      "title": "Parent Note",
+      "description": "Note left by parents for kids",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "content": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "content"]
+    },
+    "LeaderboardUser": {
+      "title": "Leaderboard User",
+      "description": "Leaderboard ranking item",
+      "type": "object",
+      "properties": {
+        "rank": { "type": "number" },
+        "name": { "type": "string" },
+        "stars": { "type": "number" }
+      },
+      "required": ["rank", "name"]
+    },
+    "VipTransaction": {
+      "title": "VIP Transaction",
+      "description": "VIP payment transaction record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "amount": { "type": "number" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "amount"]
+    },
+    "JournalEntry": {
+      "title": "Journal Entry",
+      "description": "Kid learning diary entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" }
+      },
+      "required": ["id", "userId", "title"]
+    },
+    "AccountAuditLog": {
+      "title": "Account Audit Log",
+      "description": "Admin audit log record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "actionTitle": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "actionTitle"]
+    },
+    "UserLoginSession": {
+      "title": "User Login Session",
+      "description": "Login / logout history record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "userId"]
+    },
+    "SystemBroadcastNotification": {
+      "title": "System Broadcast Notification",
+      "description": "Broadcast notification message sent by admin to online/all students",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "category": { "type": "string" },
+        "targetAudience": { "type": "string" },
+        "senderName": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "timestampMs": { "type": "number" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["id", "title", "message", "category", "targetAudience"]
+    },
+    "VipPromotionConfig": {
+      "title": "VIP Promotion Config",
+      "description": "Time-limited VIP promotion offer configured by admin",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "originalPrice": { "type": "string" },
+        "discountedPrice": { "type": "string" },
+        "discountPercent": { "type": "number" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "bannerText": { "type": "string" },
+        "ctaText": { "type": "string" },
+        "isEnabled": { "type": "boolean" },
+        "bgGradient": { "type": "string" }
+      },
+      "required": ["id", "title", "discountedPrice", "isEnabled"]
+    },
+    "UndoItem": {
+      "title": "Undo Item",
+      "description": "Admin undo history snapshot record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "description": { "type": "string" },
+        "isRestored": { "type": "boolean" }
+      },
+      "required": ["id", "description"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAccount" },
+      "description": "User accounts collection"
+    },
+    "/dailyTasks/{taskId}": {
+      "schema": { "$ref": "#/entities/DailyTask" },
+      "description": "Daily tasks collection"
+    },
+    "/rewards/{rewardId}": {
+      "schema": { "$ref": "#/entities/RewardItem" },
+      "description": "Rewards collection"
+    },
+    "/parentNotes/{noteId}": {
+      "schema": { "$ref": "#/entities/ParentNote" },
+      "description": "Parent notes collection"
+    },
+    "/leaderboard/{rankId}": {
+      "schema": { "$ref": "#/entities/LeaderboardUser" },
+      "description": "Leaderboard collection"
+    },
+    "/vipTransactions/{txId}": {
+      "schema": { "$ref": "#/entities/VipTransaction" },
+      "description": "VIP transactions collection"
+    },
+    "/journalEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/JournalEntry" },
+      "description": "Journal entries collection"
+    },
+    "/accountAuditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AccountAuditLog" },
+      "description": "Account audit logs collection"
+    },
+    "/userLoginLogs/{sessionId}": {
+      "schema": { "$ref": "#/entities/UserLoginSession" },
+      "description": "User login history collection"
+    },
+    "/systemBroadcasts/{broadcastId}": {
+      "schema": { "$ref": "#/entities/SystemBroadcastNotification" },
+      "description": "System broadcast notifications collection"
+    },
+    "/adminUndoStack/{undoId}": {
+      "schema": { "$ref": "#/entities/UndoItem" },
+      "description": "Admin undo history stack collection"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && (
+        (request.auth.token.email_verified == true
+          && (request.auth.token.email == 'caoquocbaozx4@gmail.com'
+            || request.auth.token.email == 'taikhoannangha@gmail.com'
+            || request.auth.token.admin == true))
+        || (exists(/databases/$(database)/documents/users/$(request.auth.uid))
+            && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+        || (exists(/databases/$(database)/documents/users/$('google:' + request.auth.uid))
+            && get(/databases/$(database)/documents/users/$('google:' + request.auth.uid)).data.role == 'admin')
+      );
+    }
+    // Lesson media is public after an authenticated administrator publishes it.
+    match /pageMedia/{pageKey} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['items', 'updatedAt'])
+        && request.resource.data.items is list
+        && request.resource.data.items.size() <= 100;
+      allow delete: if isAdmin();
+    }
+    match /siteContent/{documentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /vocabularyContent/{gradeId} {
+      allow get, list: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['items', 'updatedAt'])
+        && request.resource.data.items is list
+        && request.resource.data.items.size() <= 500;
+      allow delete: if isAdmin();
+    }
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+    match /dailyTasks/{taskId} {
+      allow read, write: if true;
+    }
+    match /userDailyTasks/{userId}/tasks/{taskId} {
+      allow read, write: if true;
+    }
+    match /rewards/{rewardId} {
+      allow read, write: if true;
+    }
+    match /parentNotes/{noteId} {
+      allow read, write: if true;
+    }
+    match /leaderboard/{rankId} {
+      allow read, write: if true;
+    }
+    match /vipTransactions/{txId} {
+      allow read, write: if true;
+    }
+    match /journalEntries/{entryId} {
+      allow read, write: if true;
+    }
+    match /accountAuditLogs/{logId} {
+      allow read, write: if true;
+    }
+    match /userLoginLogs/{sessionId} {
+      allow read, write: if true;
+    }
+    match /systemBroadcasts/{broadcastId} {
+      allow read, write: if true;
+    }
+    match /adminUndoStack/{undoId} {
+      allow read, write: if true;
+    }
+    match /starTransactions/{transactionId} {
+      allow read, write: if true;
+    }
+    match /studentActivities/{activityId} {
+      allow read, write: if true;
+    }
+    match /pageContent/{pageKey} {
+      allow read, write: if true;
+    }
+    match /systemBackups/{backupId} {
+      allow read, write: if isAdmin();
+    }
+    match /systemConfigs/{configId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /test/{documentId} {
+      allow read, write: if isAdmin();
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "DinoEnglish - Web Tiếng Anh CQB",
+  "description": "DinoEnglish - Ứng dụng học Tiếng Anh thông minh cho trẻ em (Learn, Play, Grow)",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
